@@ -73,13 +73,13 @@ UnoGame::~UnoGame() {
 bool UnoGame::play() {
 	std::cout << "Top card: " << *(faceUpDeck.peek()) << std::endl;
 	bool win = false;
-	unsigned int check;
+	int check;
 
 	for (unsigned int i = 0; i < _numPlayers && !win; i++) {
 		//check for match
 		check = playersInGame[i].checkCard(faceUpDeck.peek());
 		if (check >= 0) {
-			std::cout << "Player " << playersInGame[i].getName() << "has found a match and  placed down " << *(playersInGame[i].getCardAt(check)) << std::endl;
+			std::cout << "Player " << playersInGame[i].getName() << " has found a match and  placed down " << *(playersInGame[i].getCardAt(check)) << std::endl;
 			faceUpDeck.push(playersInGame[i].playCard(check));
 		}
 
