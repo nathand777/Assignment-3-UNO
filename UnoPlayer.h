@@ -43,13 +43,14 @@ void UnoPlayer::getACard(std::shared_ptr<Card> &card) {
 
 //print current cards in hand
 void UnoPlayer::printCardsInHand() {
-	std::cout << _name << "'s Cards: \n";
+	std::cout << _name << "'s Cards: " << std::endl;
 	for (unsigned int i = 1; i <= _numCards; i++)
-		std::cout << *(hand.retrieve(i));
+		std::cout << *(hand.retrieve(i)) << std::endl;
+	std::cout << std::endl;
 }
 
 unsigned int UnoPlayer::checkCard(std::shared_ptr<Card> &checkThis) {
-	for (int i = 0; i <= _numCards; i++) {
+	for (int i = 1; i <= _numCards; i++) {
 		//check if denom is the same
 		if (hand.retrieve(i)->getDenomination() == checkThis->getDenomination())
 			return i;

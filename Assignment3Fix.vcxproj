@@ -153,6 +153,9 @@
     <ClInclude Include="UnoGame.h" />
     <ClInclude Include="UnoPlayer.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
