@@ -21,11 +21,11 @@ public:
 
 	std::string getName() { return _name; }
 	unsigned int getNumCards() { return _numCards; }
-	unsigned int checkCard(std::shared_ptr<Card> &checkThis);
-	void getACard(std::shared_ptr<Card> &card);
+	unsigned int checkCard(std::shared_ptr<Card> checkThis);
+	void getACard(std::shared_ptr<Card> card);
 	void printCardsInHand();
 	std::shared_ptr<Card> getCardAt(unsigned int n) { return hand.retrieve(n); }
-	std::shared_ptr<Card> playCard(unsigned int n) { _numCards--; return hand.retrieve(n); }
+	std::shared_ptr<Card> playCard(unsigned int n) { _numCards--; return hand.remove(n); }
 };
 
 UnoPlayer::UnoPlayer() {
@@ -36,7 +36,7 @@ UnoPlayer::UnoPlayer() {
 }
 
 //add one card to player hand
-void UnoPlayer::getACard(std::shared_ptr<Card> &card) {
+void UnoPlayer::getACard(std::shared_ptr<Card> card) {
 	hand.insert(card);
 	_numCards++;
 }
@@ -49,8 +49,8 @@ void UnoPlayer::printCardsInHand() {
 	std::cout << std::endl;
 }
 
-unsigned int UnoPlayer::checkCard(std::shared_ptr<Card> &checkThis) {
-	for (int i = 1; i <= _numCards; i++) {
+unsigned int UnoPlayer::checkCard(std::shared_ptr<Card> checkThis) {
+	for (unsigned int i = 1; i <= _numCards; i++) {
 		//check if denom is the same
 		if (hand.retrieve(i)->getDenomination() == checkThis->getDenomination())
 			return i;

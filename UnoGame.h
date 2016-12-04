@@ -21,9 +21,6 @@ class UnoGame {
 	unsigned int _numPlayers;//number of players in game
 	unsigned int _handSize;//starting handsize for players
 
-
-	void createFaceDownDeck(Bag<std::shared_ptr<Card>> &cardBag);
-
 public:
 	UnoGame(unsigned int players, unsigned int numCards);
 	~UnoGame();
@@ -36,7 +33,7 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 	_handSize = handSize;
 	playersInGame = new UnoPlayer[_numPlayers]; //container to hold players
 	
-	for (int i = 0; i < _numPlayers; i++)
+	for (unsigned int i = 0; i < _numPlayers; i++)
 		std::cout << "Player " << playersInGame[i].getName() << " has entered the game!\n";
 
 	//create bag
@@ -52,7 +49,10 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 	}
 
 	//create face down deck
-	createFaceDownDeck(cards);
+	int size = cards.currentSize();
+	for (int i = 0; i < size; i++) {
+		faceDownDeck.enqueue(cards.getOne());
+	}
 
 	//deal cards to players
 	for (unsigned int i = 0; i < _numPlayers; i++) {
@@ -70,21 +70,15 @@ UnoGame::~UnoGame() {
 	playersInGame = NULL;
 }
 
-void UnoGame::createFaceDownDeck(Bag<std::shared_ptr<Card>> &cardBag) {
-	int size = cardBag.currentSize();
-	for (int i = 0; i < size; i++) {
-		faceDownDeck.enqueue(cardBag.getOne());
-	}
-}
-
 bool UnoGame::play() {
 	std::cout << "Top card: " << *(faceUpDeck.peek()) << std::endl;
 	bool win = false;
 	unsigned int check;
 
-	for (int i = 0; i < _numPlayers && !win; i++) {
+	for (unsigned int i = 0; i < _numPlayers && !win; i++) {
+		//check for match
 		check = playersInGame[i].checkCard(faceUpDeck.peek());
-		if (check > 0) {
+		if (check >= 0) {
 			std::cout << "Player " << playersInGame[i].getName() << "has found a match and  placed down " << *(playersInGame[i].getCardAt(check)) << std::endl;
 			faceUpDeck.push(playersInGame[i].playCard(check));
 		}
@@ -111,10 +105,11 @@ bool UnoGame::play() {
 			std::cout << "Player " << playersInGame[i].getName() << " has placed their last card and won!\n";
 			win = true;
 		}
+		check = -1;
 	}
 
 	if (!win) {
-		for (int i = 0; i < _numPlayers; i++)
+		for (unsigned int i = 0; i < _numPlayers; i++)
 			playersInGame[i].printCardsInHand();
 	}
 
