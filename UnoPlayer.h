@@ -13,7 +13,7 @@
 class UnoPlayer {
 	std::string _name;
 	unsigned int _numCards = 0;
-	OrderedList<std::shared_ptr<Card>> hand;
+	OrderedList<std::shared_ptr<Card>, IsLessDeref> hand;
 
 public:
 	UnoPlayer();

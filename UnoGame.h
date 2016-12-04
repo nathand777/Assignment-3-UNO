@@ -36,11 +36,12 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 	for (unsigned int i = 0; i < _numPlayers; i++)
 		std::cout << "Player " << playersInGame[i].getName() << " has entered the game!\n";
 
-	//create bag
+	//create bag for cards
 	Bag<std::shared_ptr<Card>> cards(40);
 	Suit s[] = { RED, YELLOW, BLUE, GREEN };
 	Denomination d[] = { N1, N2, N3, N4, N5 };
 
+	//add cards
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 5; j++) {
 			cards.add(std::make_shared<Card>(s[i], d[j]));
@@ -61,7 +62,7 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 	}
 
 	faceUpDeck.push(faceDownDeck.dequeue()); //place first card on deck
-	std::cout << "Start \n";
+	std::cout << "Start! \n";
 
 }
 
@@ -71,7 +72,7 @@ UnoGame::~UnoGame() {
 }
 
 bool UnoGame::play() {
-	std::cout << "Top card: " << *(faceUpDeck.peek()) << std::endl;
+	std::cout << "Top card: " << *(faceUpDeck.peek()) << std::endl << std::endl; //display top card
 	bool win = false;
 	int check;
 
@@ -97,17 +98,20 @@ bool UnoGame::play() {
 			std::cout << "Deck has been repopulated" << std::endl;
 			}
 
-		//check if player has won
+		//check if player has 1 card left
 		if (playersInGame[i].getNumCards() == 1)
 			std::cout << "Player " << playersInGame[i].getName() << " has 1 card left!\n";
 
+		//check if player has no cards
 		if (playersInGame[i].getNumCards() == 0) {
 			std::cout << "Player " << playersInGame[i].getName() << " has placed their last card and won!\n";
 			win = true;
 		}
-		check = -1;
 	}
 
+	std::cout << std::endl;
+
+	//print out cards
 	if (!win) {
 		for (unsigned int i = 0; i < _numPlayers; i++)
 			playersInGame[i].printCardsInHand();

@@ -18,9 +18,13 @@ int main() {
 	UnoGame game(numPlayers, startingHandSize);
 
 
-	while (!game.play() && yn != 'n') {
+	while (!game.play()) {
 		cout << "Continue? Y/N: ";
 		cin >> yn;
+		cout << endl;
+
+		if (yn == 'n' || yn == 'N')
+			break;
 	}
 
 
