@@ -33,9 +33,18 @@ public:
 	bool play(); //turn function that will return true once someone wins
 };
 
-UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = NUM_OF_CARDS) {
-	_numPlayers = players;
-	_handSize = handSize;
+UnoGame::UnoGame(unsigned int players, unsigned int handSize) {
+	
+	if (players*handSize >= 40 || players*handSize == 0) { //check if inputs are valid
+		std::cout << "Invalid input: Setting to defaults\n";
+		_numPlayers = NUM_OF_PLAYERS;
+		_handSize = NUM_OF_CARDS;
+	}
+
+	else {
+		_numPlayers = players;
+		_handSize = handSize;
+	}
 	playersInGame = new UnoPlayer[_numPlayers]; //container to hold players
 	
 	//display players who joined
@@ -65,7 +74,7 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 
 	//deal cards to players
 	for (unsigned int i = 0; i < _numPlayers; i++) {
-		for (unsigned int j = 0; j < 7; j++)
+		for (unsigned int j = 0; j < handSize; j++)
 			playersInGame[i].getACard(faceDownDeck.dequeue());
 	}
 
@@ -86,6 +95,16 @@ bool UnoGame::play() {
 	int check; //position of card in deck that matches top card
 
 	for (unsigned int i = 0; i < _numPlayers && !win; i++) {
+		
+		if (faceDownDeck.isEmpty()) { //if pile is empty
+			//i--; //decrement count so loop begins at same player
+			std::shared_ptr<Card> temp = faceUpDeck.pop(); //hold top card
+			while (faceUpDeck.size() > 0)
+				faceDownDeck.enqueue(faceUpDeck.pop()); //transfer cards from faceup pile to facedown
+			faceUpDeck.push(temp); //place top card back
+			std::cout << "Deck has been repopulated" << std::endl;
+		}
+
 		//check for match
 		check = playersInGame[i].checkCard(faceUpDeck.peek());
 		if (check >= 0) {
@@ -97,16 +116,6 @@ bool UnoGame::play() {
 			playersInGame[i].getACard(faceDownDeck.dequeue());
 			std::cout << "Player " << playersInGame[i].getName() << " could not find a match and pulled a card from the deck" << std::endl;
 		}
-
-		if (faceDownDeck.isEmpty()) { //if pile is empty
-			i--; //decrement count so loop begins at same player
-			std::shared_ptr<Card> temp = faceUpDeck.pop(); //hold top card
-			while (!faceUpDeck.isEmpty())
-				faceDownDeck.enqueue(faceUpDeck.pop()); //transfer cards from faceup pile to facedown
-			faceUpDeck.push(temp); //place top card back
-			std::cout << "Deck has been repopulated" << std::endl;
-			}
-
 		//check if player has 1 card left
 		if (playersInGame[i].getNumCards() == 1)
 			std::cout << "Uno! Player " << playersInGame[i].getName() << " has 1 card left!\n";
