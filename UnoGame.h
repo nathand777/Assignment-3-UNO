@@ -1,3 +1,9 @@
+/*
+Name:			Nathan Dimla
+Date:			December 7, 2016
+Description:	Header file for the Uno Game. Contains the deck and cards as well as the function that
+				runs the turns for each player.
+*/
 #pragma once
 #include <iostream>
 #include <string>
@@ -14,10 +20,9 @@
 #define NUM_OF_CARDS 7
 
 class UnoGame {
-
-	Queue<std::shared_ptr<Card>> faceDownDeck;
-	Stack<std::shared_ptr<Card>> faceUpDeck;
-	UnoPlayer *playersInGame;
+	Queue<std::shared_ptr<Card>> faceDownDeck; //pile players pull cards from
+	Stack<std::shared_ptr<Card>> faceUpDeck; //face up pile where players put cards down
+	UnoPlayer *playersInGame; //containter to hold players
 	unsigned int _numPlayers;//number of players in game
 	unsigned int _handSize;//starting handsize for players
 
@@ -33,6 +38,7 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 	_handSize = handSize;
 	playersInGame = new UnoPlayer[_numPlayers]; //container to hold players
 	
+	//display players who joined
 	for (unsigned int i = 0; i < _numPlayers; i++)
 		std::cout << "Player " << playersInGame[i].getName() << " has entered the game!\n";
 
@@ -55,6 +61,8 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 		faceDownDeck.enqueue(cards.getOne());
 	}
 
+	std::cout << "Deck Created! \nDealing cards to players\n";
+
 	//deal cards to players
 	for (unsigned int i = 0; i < _numPlayers; i++) {
 		for (unsigned int j = 0; j < 7; j++)
@@ -67,14 +75,15 @@ UnoGame::UnoGame(unsigned int players = NUM_OF_PLAYERS, unsigned int handSize = 
 }
 
 UnoGame::~UnoGame() {
-	delete[] playersInGame;
+	delete[] playersInGame; //delete dynamic array
 	playersInGame = NULL;
 }
 
 bool UnoGame::play() {
+	std::cout << "****************************************************************\n";
 	std::cout << "Top card: " << *(faceUpDeck.peek()) << std::endl << std::endl; //display top card
-	bool win = false;
-	int check;
+	bool win = false; //boolean flag to check if a player has won
+	int check; //position of card in deck that matches top card
 
 	for (unsigned int i = 0; i < _numPlayers && !win; i++) {
 		//check for match
@@ -100,7 +109,7 @@ bool UnoGame::play() {
 
 		//check if player has 1 card left
 		if (playersInGame[i].getNumCards() == 1)
-			std::cout << "Player " << playersInGame[i].getName() << " has 1 card left!\n";
+			std::cout << "Uno! Player " << playersInGame[i].getName() << " has 1 card left!\n";
 
 		//check if player has no cards
 		if (playersInGame[i].getNumCards() == 0) {

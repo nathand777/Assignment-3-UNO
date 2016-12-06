@@ -1,3 +1,9 @@
+/*
+Name:				Nathan Dimla
+Date:				December 7, 2016
+Description:		This header is a modified Card header from lab 9. It contains an Uno card instead
+					for the use of this assignment.
+*/
 #pragma once
 #include <iostream>
 
@@ -47,6 +53,7 @@ Card::~Card()
 {
 }
 
+//get char from suit
 char Card::toCharSuit()
 {
 	if (m_suit == RED)   return 'R';
@@ -55,6 +62,7 @@ char Card::toCharSuit()
 	else                       return 'G';
 }
 
+//get char from denom
 char Card::toCharDenomination()
 {
 	if (m_denomination == N1)	return '1';
@@ -63,6 +71,8 @@ char Card::toCharDenomination()
 	else if (m_denomination == N4)	return '4';
 	else                            return '5';
 }
+
+//operator overload for printing out
 std::ostream& operator<<(std::ostream& os, const Card &c) {
 	int suit = c.getSuit();
 	int demo = c.getDenomination();
